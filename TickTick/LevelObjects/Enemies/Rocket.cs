@@ -49,8 +49,21 @@ class Rocket : AnimatedGameObject
         else if (!sprite.Mirror && BoundingBox.Left > level.BoundingBox.Right)
             Reset();
 
-        // if the rocket touches the player, the player dies
+        // detect if the player is touching the rocket
         if (level.Player.CanCollideWithObjects && HasPixelPreciseCollision(level.Player))
-            level.Player.Die();
+        {
+            //Checks if the player is above the sprite
+            if (level.Player.LocalPosition.Y < LocalPosition.Y)
+            {
+                // moves the player with the rocket
+                level.Player.MoveWithObject(velocity, gameTime);
+            }
+            else
+            {// if the rocket touches the player, the player dies
+                level.Player.Die();
+            }
+            
+        }
+            
     }
 }

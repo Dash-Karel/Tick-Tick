@@ -17,6 +17,7 @@ class Player : AnimatedGameObject
     bool facingLeft; // Whether or not the character is currently looking to the left.
 
     bool isGrounded; // Whether or not the character is currently standing on something.
+    bool isOnMovingObject;
     bool standingOnIceTile, standingOnHotTile; // Whether or not the character is standing on an ice tile or a hot tile.
     float desiredHorizontalSpeed; // The horizontal speed at which the character would like to move.
 
@@ -65,6 +66,8 @@ class Player : AnimatedGameObject
         IsAlive = true;
         isExploding = false;
         isCelebrating = false;
+        IsRising = false;
+        isOnMovingObject = false;
     }
 
     public override void HandleInput(InputHelper inputHelper)
@@ -113,11 +116,14 @@ class Player : AnimatedGameObject
 
     public void Jump(float speed = jumpSpeed)
     {
+        IsRising = true;
         velocity.Y = -speed;
+        isGrounded = false;
         // play the jump animation; always make sure that the animation restarts
         PlayAnimation("jump", true);
         // play a sound
         ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_player_jump");
+        
     }
 
     /// <summary>
@@ -127,14 +133,15 @@ class Player : AnimatedGameObject
     {
         get { return velocity.Y > 0 && !isGrounded; }
     }
-
+    bool IsRising;
+    
     void SetOriginToBottomCenter()
     {
         Origin = new Vector2(sprite.Width / 2, sprite.Height);
     }
-
     public override void Update(GameTime gameTime)
     {
+        
         Vector2 previousPosition = localPosition;
 
         if (CanCollideWithObjects)
@@ -143,14 +150,23 @@ class Player : AnimatedGameObject
             velocity.X = 0;
 
         if (!isExploding)
-            ApplyGravity(gameTime);
+            if(!isGrounded)
+                ApplyGravity(gameTime);
 
         base.Update(gameTime);
+        if (isGrounded &&!IsRising)
+            velocity.Y = 0;
+        if (IsFalling)
+            IsRising = false;
 
         if (IsAlive)
         {
             // check for collisions with tiles
             HandleTileCollisions(previousPosition);
+            if (isOnMovingObject)
+            {
+                isGrounded = true;
+            }
             // check if we've fallen down through the level
             if (BoundingBox.Center.Y > level.BoundingBox.Bottom)
                 Die();
@@ -159,8 +175,9 @@ class Player : AnimatedGameObject
                 level.Timer.Multiplier = 2;
             else
                 level.Timer.Multiplier = 1;
+
         }
-            
+        isOnMovingObject = false;
     }
 
     void ApplyFriction(GameTime gameTime)
@@ -308,5 +325,17 @@ class Player : AnimatedGameObject
 
         // stop moving
         velocity = Vector2.Zero;
+    }
+    /// <summary>
+    /// Makes the player move with a different object
+    /// </summary>
+    /// <param name="velocity"></param>velocity of the object.
+    /// <param name="gameTime"></param>
+    public void MoveWithObject(Vector2 velocity, GameTime gameTime)
+    {
+        LocalPosition += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        
+        isOnMovingObject = true;
+        
     }
 }
