@@ -73,6 +73,13 @@ class LevelMenuState : GameState
                 return;
             }
         }
+
+
+        //camera test code
+        if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Left))
+            TickTick.Camera.Position -= new Vector2(10, 0);
+        if (inputHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Right))
+            TickTick.Camera.Position += new Vector2(10, 0);
     }
 
     public override void Update(GameTime gameTime)

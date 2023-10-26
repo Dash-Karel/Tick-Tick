@@ -30,6 +30,11 @@ namespace Engine
         Matrix spriteScale;
 
         /// <summary>
+        /// The depth at which the UI layer starts, used to make sure all elements with this depth or higher are not effected by the camera
+        /// </summary>
+        public static float UIStartDepth { get; protected set; } = 0.8f;
+
+        /// <summary>
         /// An object for generating random numbers throughout the game.
         /// </summary>
         public static Random Random { get; private set; }
@@ -43,6 +48,11 @@ namespace Engine
         /// The object that manages all game states, one of which is the active state.
         /// </summary>
         public static GameStateManager GameStateManager { get; private set; }
+
+        /// <summary>
+        /// The object that defines what part of the game world is being viewed
+        /// </summary>
+        public static Camera Camera { get; protected set; }
 
         public static string ContentRootDirectory { get { return "Content"; } }
 
@@ -148,11 +158,21 @@ namespace Engine
 
             graphics.ApplyChanges();
 
-            // calculate and set the viewport to use
-            GraphicsDevice.Viewport = CalculateViewport(screenSize);
+            Point viewSize;
+            // calculate and set the viewport to use as well as choosing which size to scale to
+            if (Camera != null)
+            {
+                GraphicsDevice.Viewport = Camera.CalculateViewPort(screenSize);
+                viewSize = Camera.Size;
+            }
+            else
+            {
+                GraphicsDevice.Viewport = CalculateViewport(screenSize);
+                viewSize = worldSize;
+            }
 
             // calculate how the graphics should be scaled, so that the game world fits inside the window
-            spriteScale = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width / worldSize.X, (float)GraphicsDevice.Viewport.Height / worldSize.Y, 1);
+            spriteScale = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width / viewSize.X, (float)GraphicsDevice.Viewport.Height / viewSize.Y, 1);
         }
 
         /// <summary>
@@ -192,7 +212,7 @@ namespace Engine
         /// <summary>
         /// Gets or sets whether the game is running in full-screen mode.
         /// </summary>
-        protected bool FullScreen
+        public bool FullScreen
         {
             get { return graphics.IsFullScreen; }
             set { ApplyResolutionSettings(value); }
