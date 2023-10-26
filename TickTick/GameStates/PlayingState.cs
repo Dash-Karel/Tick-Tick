@@ -6,11 +6,14 @@ using Microsoft.Xna.Framework.Input;
 
 class PlayingState : GameState, IPlayingState
 {
+    //a reference to the Game
+    TickTick game;
+
     Level level;
     Button quitButton;
     SpriteGameObject completedOverlay, gameOverOverlay;
 
-    public PlayingState()
+    public PlayingState(TickTick game)
     {
         // add a "quit" button
         quitButton = new Button("Sprites/UI/spr_button_quit", 1);
@@ -20,6 +23,9 @@ class PlayingState : GameState, IPlayingState
         // add overlay images
         completedOverlay = AddOverlay("Sprites/UI/spr_welldone");
         gameOverOverlay = AddOverlay("Sprites/UI/spr_gameover");
+
+        //store the reference to the game
+        this.game = game;
     }
 
     SpriteGameObject AddOverlay(string spriteName)
@@ -82,7 +88,7 @@ class PlayingState : GameState, IPlayingState
 
     public void LoadLevel(int levelIndex)
     {
-        level = new Level(levelIndex, ExtendedGame.ContentRootDirectory + "/Levels/level" + levelIndex + ".txt");
+        level = new Level(levelIndex, ExtendedGame.ContentRootDirectory + "/Levels/level" + levelIndex + ".txt", game);
 
         // hide the overlay images
         completedOverlay.Visible = false;

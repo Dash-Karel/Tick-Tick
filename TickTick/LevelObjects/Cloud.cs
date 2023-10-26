@@ -26,7 +26,7 @@ class Cloud : SpriteGameObject
         sprite = new SpriteSheet("Sprites/Backgrounds/spr_cloud_" + ExtendedGame.Random.Next(1, 6), depth);
 
         // set a random y-coordinate and speed
-        float y = ExtendedGame.Random.Next(100, 600) - sprite.Height;
+        float y = ExtendedGame.Random.Next(100, level.BoundingBox.Height - 250) - sprite.Height;
         float speed = ExtendedGame.Random.Next(10, 50);
 
         if (ExtendedGame.Random.Next(2) == 0)

@@ -62,7 +62,7 @@ namespace Engine
             //If there is a camera and the object is not in the UI layer the spriteobject should be drawn relative to the camera, else it should just be drawn at its global position
             Vector2 drawPosition;
             if (ExtendedGame.Camera != null && depth < ExtendedGame.UIStartDepth)
-                drawPosition = GlobalPosition - ExtendedGame.Camera.CenterPosition;
+                drawPosition = GlobalPosition - ExtendedGame.Camera.GlobalPosition;
             else 
                 drawPosition = GlobalPosition;
 

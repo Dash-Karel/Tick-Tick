@@ -3,13 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine
 {
-    public class Camera
+    public class Camera : GameObject
     {
-        /// <summary>
-        /// Everything within this rectangle will be shown/rendered
-        /// </summary>
-        Rectangle cameraView;
+        public Point WorldSize { private get; set; }
 
+        /// <summary>
+        /// The speed at which the camera moves towards the subject
+        /// </summary>
+        public float Speed { get; set; } = 2f;
+        
         /// <summary>
         /// CenterPosition is the location of the center of the cameraview
         /// </summary>
@@ -17,39 +19,45 @@ namespace Engine
         {
             get
             {
-                return new Vector2(cameraView.X - Origin.X, cameraView.Y - Origin.Y);
+                return new Vector2(GlobalPosition.X + Origin.X, GlobalPosition.Y + Origin.Y);
             }
         }
-        public Vector2 Position
-        {
-            get
-            {
-                return new Vector2(cameraView.X, cameraView.Y);
-            }
-            set
-            {
-                cameraView.X = (int)value.X;
-                cameraView.Y = (int)value.Y;
-            }
-        }
-        public Point Size
-        {
-            get
-            {
-                return cameraView.Size;
-            }
-        }
+
+        /// <summary>
+        /// the size of the area that will be shown
+        /// </summary>
+        public Point Size { get; private set; }
+
+        /// <summary>
+        /// The center of the size window
+        /// </summary>
         private Point Origin
         {
             get
             {
-                return new Point(cameraView.Width / 2, cameraView.Height / 2);
+                return new Point(Size.X / 2, Size.Y / 2);
             }
         }
+
+        public SpriteGameObject Subject { private get; set; }
         
-        public Camera(Point cameraSize)
+        public Camera(Point cameraSize, Point worldSize)
         {
-            cameraView = new Rectangle(Point.Zero, cameraSize);
+            Visible = false;
+            Size = cameraSize;
+            WorldSize = worldSize;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (Subject != null)
+            {
+                velocity = (Subject.GlobalPosition - Subject.Origin - CenterPosition) * Speed;
+                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                localPosition = Vector2.Clamp(localPosition + velocity * deltaTime, Vector2.Zero , (WorldSize - Size).ToVector2());
+            }
+            else
+                localPosition = Vector2.Zero;
         }
 
         public Viewport CalculateViewPort(Point windowSize)

@@ -11,6 +11,16 @@ class TickTick : ExtendedGameWithLevels
     public const float Depth_LevelObjects = 0.6f; // for all game objects except the player
     public const float Depth_LevelPlayer = 0.7f; // for the player
 
+    //make the worldSize accessible so it can be changed if there is a bigger level
+    public Point WorldSize 
+    {
+        get { return worldSize; }
+        set 
+        { 
+            worldSize = value;
+            Camera.WorldSize = value;      
+        }
+    }
 
     [STAThread]
     static void Main()
@@ -24,6 +34,12 @@ class TickTick : ExtendedGameWithLevels
         IsMouseVisible = true;
     }
 
+    protected override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+        Camera.Update(gameTime);
+    }
+
     protected override void LoadContent()
     {
         base.LoadContent();
@@ -32,8 +48,7 @@ class TickTick : ExtendedGameWithLevels
         worldSize = new Point(1440, 825);
         windowSize = new Point(1024, 586);
 
-        Camera = new Camera(worldSize);
-        Camera.Position = new Vector2(worldSize.X / 2, worldSize.Y / 2);
+        Camera = new Camera(new Point(1440, 825), worldSize);
         
         // to let these settings take effect, we need to set the FullScreen property again
         FullScreen = false;
@@ -45,7 +60,7 @@ class TickTick : ExtendedGameWithLevels
         GameStateManager.AddGameState(StateName_Title, new TitleMenuState());
         GameStateManager.AddGameState(StateName_LevelSelect, new LevelMenuState());
         GameStateManager.AddGameState(StateName_Help, new HelpState());
-        GameStateManager.AddGameState(StateName_Playing, new PlayingState());
+        GameStateManager.AddGameState(StateName_Playing, new PlayingState(this));
 
         // start at the title screen
         GameStateManager.SwitchTo(StateName_Title);

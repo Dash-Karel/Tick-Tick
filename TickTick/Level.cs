@@ -14,45 +14,60 @@ partial class Level : GameObjectList
     public Player Player { get; private set; }
     public int LevelIndex { get; private set; }
 
+    //a reference to TickTick to be able to update the world size
+    TickTick game;
+
     SpriteGameObject goal;
     BombTimer timer;
 
     bool completionDetected;
 
-    public Level(int levelIndex, string filename)
+    public Level(int levelIndex, string filename, TickTick game)
     {
+        //save the reference to the Game 
+        this.game = game;
+
         LevelIndex = levelIndex;
-
-        // load the background
-        GameObjectList backgrounds = new GameObjectList();
-        SpriteGameObject backgroundSky = new SpriteGameObject("Sprites/Backgrounds/spr_sky", TickTick.Depth_Background);
-        backgroundSky.LocalPosition = new Vector2(0, 825 - backgroundSky.Height);
-        backgrounds.AddChild(backgroundSky);
-
-        AddChild(backgrounds);
 
         // load the rest of the level
         LoadLevelFromFile(filename);
 
-        // add the timer
-        timer = new BombTimer();
-        AddChild(timer);
+        // load the backgrounds
+        GameObjectList backgrounds = new GameObjectList();
+        int horizontalAmountOfBackgrounds = (int)MathF.Ceiling(BoundingBox.Width / 2048f);
+        int verticalAmountOfBackgrounds = (int)MathF.Ceiling(BoundingBox.Height / 1290f);
+        for (int x = 0; x < horizontalAmountOfBackgrounds; x++)
+        {
+            SpriteGameObject backgroundSky = new SpriteGameObject("Sprites/Backgrounds/spr_sky", TickTick.Depth_Background);
+            backgroundSky.LocalPosition = new Vector2(x * backgroundSky.Width, BoundingBox.Height - backgroundSky.Height);
+            backgrounds.AddChild(backgroundSky);
+            for(int y = 1; y < verticalAmountOfBackgrounds; y++) 
+            {
+                SpriteGameObject backgroundHighSky = new SpriteGameObject("Sprites/Backgrounds/spr_highSky", TickTick.Depth_Background);
+                backgroundHighSky.LocalPosition = new Vector2(x * backgroundHighSky.Width, BoundingBox.Height - (y + 1) * backgroundHighSky.Height);
+                backgrounds.AddChild(backgroundHighSky);
+            }
+        }
+
+        AddChild(backgrounds);
 
         // add mountains in the background
-        for (int i = 0; i < 4; i++)
+        int mountainsAmount = horizontalAmountOfBackgrounds * 4;
+        for (int i = 0; i < mountainsAmount; i++)
         {
             SpriteGameObject mountain = new SpriteGameObject(
                 "Sprites/Backgrounds/spr_mountain_" + (ExtendedGame.Random.Next(2) + 1),
                 TickTick.Depth_Background + 0.01f * (float)ExtendedGame.Random.NextDouble());
 
-            mountain.LocalPosition = new Vector2(mountain.Width * (i-1) * 0.4f, 
+            mountain.LocalPosition = new Vector2(mountain.Width * (i-1) * 0.425f, 
                 BoundingBox.Height - mountain.Height);
 
             backgrounds.AddChild(mountain);
         }
 
         // add clouds
-        for (int i = 0; i < 6; i++)
+        int cloudsAmount = horizontalAmountOfBackgrounds * verticalAmountOfBackgrounds * 6;
+       for (int i = 0; i < cloudsAmount; i++)
             backgrounds.AddChild(new Cloud(this));
     }
 

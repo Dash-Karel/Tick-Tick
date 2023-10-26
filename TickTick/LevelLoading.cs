@@ -18,7 +18,7 @@ partial class Level : GameObjectList
 
         List<string> gridRows = new List<string>();
         string line = reader.ReadLine();
-        while (line != null)
+        while (line != null && line[0] != 't')
         {
             if (line.Length > gridWidth)
                 gridWidth = line.Length;
@@ -26,7 +26,19 @@ partial class Level : GameObjectList
             gridRows.Add(line);
             line = reader.ReadLine();
         }
+        
+        //read the timer length, if it is present
+        double timerLength = 30;
+        if (line != null) 
+        {
+            line = line.Remove(0, 1);
+            timerLength = double.Parse(line);
+        }
 
+        // add the timer
+        timer = new BombTimer(timerLength);
+        AddChild(timer);
+        
         // stop reading the file
         reader.Close();
         
@@ -35,6 +47,9 @@ partial class Level : GameObjectList
 
         // add game objects to show that general level info
         AddLevelInfoObjects(description);
+
+        // make sure the world size matches the size of the playing field
+        game.WorldSize = new Point(gridWidth * TileWidth, gridRows.Count * TileHeight);
     }
 
     void AddLevelInfoObjects(string description)
@@ -133,6 +148,7 @@ partial class Level : GameObjectList
         // create the bomb character
         Player = new Player(this, GetCellBottomCenter(x, y));
         AddChild(Player);
+        TickTick.Camera.Subject = Player;
     }
 
     void LoadGoal(int x, int y)
