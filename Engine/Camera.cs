@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Engine
 {
@@ -10,7 +11,7 @@ namespace Engine
         /// <summary>
         /// The speed at which the camera moves towards the subject
         /// </summary>
-        public float Speed { get; set; } = 2f;
+        public float Speed { get; set; } = 2.5f;
         
         /// <summary>
         /// CenterPosition is the location of the center of the cameraview
@@ -52,7 +53,7 @@ namespace Engine
         {
             if (Subject != null)
             {
-                velocity = (Subject.GlobalPosition - Subject.Origin - CenterPosition) * Speed;
+                velocity = (Subject.GlobalPosition - CenterPosition) * Speed;
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 localPosition = Vector2.Clamp(localPosition + velocity * deltaTime, Vector2.Zero , (WorldSize - Size).ToVector2());
             }
