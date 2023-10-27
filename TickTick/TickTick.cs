@@ -4,6 +4,9 @@ using System;
 
 class TickTick : ExtendedGameWithLevels
 {
+    const int standardWorldSizeX = 1440;
+    const int standardWorldSizeY = 825;
+
     public const float Depth_Background = 0; // for background images
     public const float Depth_UIBackground = 0.9f; // for UI elements with text on top of them
     public const float Depth_UIForeground = 1; // for UI elements in front
@@ -45,10 +48,10 @@ class TickTick : ExtendedGameWithLevels
         base.LoadContent();
 
         // set a custom world and window size
-        worldSize = new Point(1440, 825);
+        worldSize = new Point(standardWorldSizeX, standardWorldSizeY);
         windowSize = new Point(1024, 586);
 
-        Camera = new Camera(new Point(1440, 825), worldSize);
+        Camera = new Camera(worldSize, worldSize);
         
         // to let these settings take effect, we need to set the FullScreen property again
         FullScreen = false;
@@ -67,6 +70,12 @@ class TickTick : ExtendedGameWithLevels
 
         // play background music
         AssetManager.PlaySong("Sounds/snd_music", true);
+    }
+
+
+    public void ResetWorldSize()
+    {
+        WorldSize = new Point(standardWorldSizeX, standardWorldSizeY);
     }
     
 }

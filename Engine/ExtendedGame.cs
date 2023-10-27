@@ -219,15 +219,32 @@ namespace Engine
         }
 
         /// <summary>
-        /// Converts a position in screen coordinates to a position in world coordinates.
+        /// Converts a position in screen coordinates to a position in world coordinates with the top left of the sreen being the top left of the world.
         /// </summary>
         /// <param name="screenPosition">A position in screen coordinates.</param>
         /// <returns>The corresponding position in world coordinates.</returns>
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
             Vector2 viewportTopLeft = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
+
+            if (Camera != null)
+            {
+                float screenToCameraScale = Camera.Size.X / (float)GraphicsDevice.Viewport.Width;
+                return (screenPosition - viewportTopLeft) * screenToCameraScale;
+            }
             float screenToWorldScale = worldSize.X / (float)GraphicsDevice.Viewport.Width;
             return (screenPosition - viewportTopLeft) * screenToWorldScale;
+        }
+
+        /// <summary>
+        /// Converts a position in screen coordinates to a position in world coordinates with the top left of the screen being the top left of the camera view
+        /// </summary>
+        /// <param name="screenPosition">A position in screen coordinates.</param>
+        /// <returns>The corresponding position in world coordinates.</returns>
+        public Vector2 ScreenToCameraView(Vector2 screenPosition)
+        {
+            Vector2 positionWithinView = ScreenToWorld(screenPosition);
+            return (positionWithinView + Camera.GlobalPosition);
         }
     }
 }
