@@ -56,11 +56,12 @@ class Rocket : AnimatedGameObject
             if (level.Player.LocalPosition.Y < LocalPosition.Y)
             {
                 // moves the player with the rocket
-                level.Player.MoveWithObject(velocity, gameTime);
+                level.Player.MoveWithObject(velocity, gameTime, LocalPosition.Y - Height/4);
             }
             else
             {// if the rocket touches the player, the player dies
                 level.Player.Die();
+
             }
             
         }
