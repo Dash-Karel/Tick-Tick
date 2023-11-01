@@ -35,6 +35,11 @@ namespace Engine
         public static float UIStartDepth { get; protected set; } = 0.8f;
 
         /// <summary>
+        /// The depth at which the parallax effect ends, the effect is scaled between 0 and this end value.
+        /// </summary>
+        public static float ParallaxEndDepth { get; protected set; } = 0.1f;
+
+        /// <summary>
         /// An object for generating random numbers throughout the game.
         /// </summary>
         public static Random Random { get; private set; }
@@ -100,6 +105,10 @@ namespace Engine
         {
             HandleInput();
             GameStateManager.Update(gameTime);
+            if(Camera != null) 
+            {
+                Camera.Update(gameTime);
+            }
         }
 
         /// <summary>
@@ -212,7 +221,7 @@ namespace Engine
         /// <summary>
         /// Gets or sets whether the game is running in full-screen mode.
         /// </summary>
-        public bool FullScreen
+        protected bool FullScreen
         {
             get { return graphics.IsFullScreen; }
             set { ApplyResolutionSettings(value); }
@@ -240,7 +249,7 @@ namespace Engine
         /// Converts a position in screen coordinates to a position in world coordinates with the top left of the screen being the top left of the camera view
         /// </summary>
         /// <param name="screenPosition">A position in screen coordinates.</param>
-        /// <returns>The corresponding position in world coordinates.</returns>
+        /// <returns>The corresponding position in world coordinates taking the position of the camera into account.</returns>
         public Vector2 ScreenToCameraView(Vector2 screenPosition)
         {
             Vector2 positionWithinView = ScreenToWorld(screenPosition);

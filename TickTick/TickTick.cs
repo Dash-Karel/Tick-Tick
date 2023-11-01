@@ -37,12 +37,6 @@ class TickTick : ExtendedGameWithLevels
         IsMouseVisible = true;
     }
 
-    protected override void Update(GameTime gameTime)
-    {
-        base.Update(gameTime);
-        Camera.Update(gameTime);
-    }
-
     protected override void LoadContent()
     {
         base.LoadContent();

@@ -34,39 +34,30 @@ partial class Level : GameObjectList
 
         // load the backgrounds
         GameObjectList backgrounds = new GameObjectList();
-        int horizontalAmountOfBackgrounds = (int)MathF.Ceiling(BoundingBox.Width / 2048f);
-        int verticalAmountOfBackgrounds = (int)MathF.Ceiling(BoundingBox.Height / 1290f);
-        for (int x = 0; x < horizontalAmountOfBackgrounds; x++)
-        {
-            SpriteGameObject backgroundSky = new SpriteGameObject("Sprites/Backgrounds/spr_sky", TickTick.Depth_Background);
-            backgroundSky.LocalPosition = new Vector2(x * backgroundSky.Width, BoundingBox.Height - backgroundSky.Height);
-            backgrounds.AddChild(backgroundSky);
-            for(int y = 1; y < verticalAmountOfBackgrounds; y++) 
-            {
-                SpriteGameObject backgroundHighSky = new SpriteGameObject("Sprites/Backgrounds/spr_highSky", TickTick.Depth_Background);
-                backgroundHighSky.LocalPosition = new Vector2(x * backgroundHighSky.Width, BoundingBox.Height - (y + 1) * backgroundHighSky.Height);
-                backgrounds.AddChild(backgroundHighSky);
-            }
-        }
-
+        SpriteGameObject backgroundSky = new SpriteGameObject("Sprites/Backgrounds/spr_sky", TickTick.Depth_Background);
+        backgroundSky.LocalPosition = new Vector2(0f, 825 - backgroundSky.Height);
+        backgrounds.AddChild(backgroundSky);
         AddChild(backgrounds);
 
+        int AmountOfStandardWorldWidths = (int)MathF.Ceiling(BoundingBox.Width / 2048f);
+
         // add mountains in the background
-        int mountainsAmount = horizontalAmountOfBackgrounds * 4;
+        int mountainsAmount = AmountOfStandardWorldWidths * 2;
         for (int i = 0; i < mountainsAmount; i++)
         {
+            float mountainDepth = TickTick.ParallaxEndDepth / 4 - TickTick.ParallaxEndDepth / 4 * ExtendedGame.Random.NextSingle();
             SpriteGameObject mountain = new SpriteGameObject(
-                "Sprites/Backgrounds/spr_mountain_" + (ExtendedGame.Random.Next(2) + 1),
-                TickTick.Depth_Background + 0.01f * (float)ExtendedGame.Random.NextDouble());
+                "Sprites/Backgrounds/spr_mountain_" + (ExtendedGame.Random.Next(2) + 1), mountainDepth);
 
-            mountain.LocalPosition = new Vector2(mountain.Width * (i-1) * 0.425f, 
-                BoundingBox.Height - mountain.Height);
+            float parallaxMultiplier = mountainDepth / ExtendedGame.ParallaxEndDepth;
+            mountain.LocalPosition = new Vector2(mountain.Width * (i-1) * 0.21f, 
+                TickTick.Camera.Size.Y + (BoundingBox.Height - TickTick.Camera.Size.Y) * parallaxMultiplier - mountain.Height);
 
             backgrounds.AddChild(mountain);
         }
 
         // add clouds
-        int cloudsAmount = horizontalAmountOfBackgrounds * verticalAmountOfBackgrounds * 6;
+        int cloudsAmount = AmountOfStandardWorldWidths * 6;
        for (int i = 0; i < cloudsAmount; i++)
             backgrounds.AddChild(new Cloud(this));
     }

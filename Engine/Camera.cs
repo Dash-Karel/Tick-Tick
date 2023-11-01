@@ -6,6 +6,9 @@ namespace Engine
 {
     public class Camera : GameObject
     {
+        /// <summary>
+        /// The WorldSize, this needs to be updated when changes to the ExtendedGame.WorldSize are made
+        /// </summary>
         public Point WorldSize { private get; set; }
 
         /// <summary>

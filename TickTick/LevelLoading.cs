@@ -49,7 +49,7 @@ partial class Level : GameObjectList
         AddLevelInfoObjects(description);
 
         // make sure the world size matches the size of the playing field
-        game.WorldSize = new Point(gridWidth * TileWidth, gridRows.Count * TileHeight);
+        game.WorldSize = new Point(BoundingBox.Width, BoundingBox.Height);
     }
 
     void AddLevelInfoObjects(string description)
