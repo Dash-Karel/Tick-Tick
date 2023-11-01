@@ -105,6 +105,8 @@ partial class Level : GameObjectList
             LoadSparkyEnemy(x, y);
         else if (symbol == 'A' || symbol == 'B' || symbol == 'C')
             LoadFlameEnemy(x, y, symbol);
+        else if (symbol == 's')
+            LoadSpeedPowerUp(x,y);
     }
 
     Tile CharToStaticTile(char symbol)
@@ -154,6 +156,14 @@ partial class Level : GameObjectList
         AddChild(w);
         // store an extra reference to it
         waterDrops.Add(w);
+    }
+    void LoadSpeedPowerUp(int x, int y)
+    {
+        // create the speed powerup drop object;  place it around the center of the tile
+        Vector2 pos = GetCellPosition(x, y) + new Vector2(TileWidth / 2, TileHeight / 3);
+        SpeedUpPowerUp s = new SpeedUpPowerUp(this, pos);
+        // add it to the game world
+        AddChild(s);
     }
 
     void LoadRocketEnemy(int x, int y)

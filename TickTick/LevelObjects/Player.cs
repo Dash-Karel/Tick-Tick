@@ -5,7 +5,7 @@ using System;
 
 class Player : AnimatedGameObject
 {
-    const float walkingSpeed = 400; // Standard walking speed, in game units per second.
+    public float walkingSpeed = 400; // Standard walking speed, in game units per second.
     const float jumpSpeed = 900; // Lift-off speed when the character jumps.
     const float gravity = 2300; // Strength of the gravity force that pulls the character down.
     const float maxFallSpeed = 1200; // The maximum vertical speed at which the character can fall.

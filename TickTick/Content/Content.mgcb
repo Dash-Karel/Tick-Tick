@@ -27,17 +27,20 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/MainFont.spritefont
 
-#begin Sounds/snd_beep.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Sounds/snd_beep.wav
+#begin Levels/level1.txt
+/copy:Levels/level1.txt
 
 #begin Sounds/snd_beep_high.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/snd_beep_high.wav
+
+#begin Sounds/snd_beep.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_beep.wav
 
 #begin Sounds/snd_music.mp3
 /importer:Mp3Importer
@@ -291,6 +294,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/LevelObjects/Player/spr_run@13.png
 
+#begin Sprites/LevelObjects/PowerUps/speedUp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/PowerUps/speedUp.png
+
 #begin Sprites/LevelObjects/Rocket/spr_rocket@3.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -387,18 +402,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/LevelObjects/Turtle/spr_sneeze@9.png
 
-#begin Sprites/Tiles/spr_platform.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/Tiles/spr_platform.png
-
 #begin Sprites/Tiles/spr_platform_hot.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -423,7 +426,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Tiles/spr_platform_ice.png
 
-#begin Sprites/Tiles/spr_wall.png
+#begin Sprites/Tiles/spr_platform.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -433,7 +436,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/Tiles/spr_wall.png
+/build:Sprites/Tiles/spr_platform.png
 
 #begin Sprites/Tiles/spr_wall_hot.png
 /importer:TextureImporter
@@ -458,6 +461,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/Tiles/spr_wall_ice.png
+
+#begin Sprites/Tiles/spr_wall.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Tiles/spr_wall.png
 
 #begin Sprites/UI/spr_button_back.png
 /importer:TextureImporter
