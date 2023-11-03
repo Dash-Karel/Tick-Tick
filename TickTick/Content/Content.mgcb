@@ -30,6 +30,9 @@
 #begin Levels/level1.txt
 /copy:Levels/level1.txt
 
+#begin Levels/level11.txt
+/copy:Levels/level11.txt
+
 #begin Sounds/snd_beep_high.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

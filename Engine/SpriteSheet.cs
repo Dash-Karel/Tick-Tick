@@ -78,7 +78,19 @@ namespace Engine
             if (Mirror)
                 spriteEffects = SpriteEffects.FlipHorizontally;
 
-            spriteBatch.Draw(sprite, position, spriteRectangle, Color.White,
+            //If there is a camera and the object is not in the UI layer the spriteobject should be drawn relative to the camera, else it should just be drawn at its global position
+            Vector2 drawPosition;
+            if (ExtendedGame.Camera != null && depth < ExtendedGame.UIStartDepth)
+            {
+                float parallaxMultiplier = 1f;
+                if (depth < ExtendedGame.ParallaxEndDepth)
+                    parallaxMultiplier = depth / ExtendedGame.ParallaxEndDepth;
+                drawPosition = position - ExtendedGame.Camera.GlobalPosition * parallaxMultiplier;
+            }
+            else
+                drawPosition = position;
+
+            spriteBatch.Draw(sprite, drawPosition, spriteRectangle, Color.White,
                 0.0f, origin, 1.0f, spriteEffects, depth);
         }
 

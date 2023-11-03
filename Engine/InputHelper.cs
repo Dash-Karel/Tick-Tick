@@ -42,11 +42,19 @@ namespace Engine
         }
 
         /// <summary>
-        /// Gets the current position of the mouse in world coordinates.
-        /// </summary>
+        /// Gets the current position of the mouse in world coordinates. With the top left of the screen being the top left of the World
+        /// </summary>  
         public Vector2 MousePositionWorld
         {
             get { return game.ScreenToWorld(MousePositionScreen); }
+        }
+
+        /// <summary>
+        /// Gets the current position of the mouse in world coordinates. With the top left of the screen being the top left of the camera view
+        /// </summary>
+        public Vector2 MousePositionCameraView
+        {
+            get { return game.ScreenToCameraView(MousePositionScreen); }
         }
 
         /// <summary>

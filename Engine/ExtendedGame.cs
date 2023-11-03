@@ -30,6 +30,16 @@ namespace Engine
         Matrix spriteScale;
 
         /// <summary>
+        /// The depth at which the UI layer starts, used to make sure all elements with this depth or higher are not effected by the camera
+        /// </summary>
+        public static float UIStartDepth { get; protected set; } = 0.8f;
+
+        /// <summary>
+        /// The depth at which the parallax effect ends, the effect is scaled between 0 and this end value.
+        /// </summary>
+        public static float ParallaxEndDepth { get; protected set; } = 0.1f;
+
+        /// <summary>
         /// An object for generating random numbers throughout the game.
         /// </summary>
         public static Random Random { get; private set; }
@@ -43,6 +53,11 @@ namespace Engine
         /// The object that manages all game states, one of which is the active state.
         /// </summary>
         public static GameStateManager GameStateManager { get; private set; }
+
+        /// <summary>
+        /// The object that defines what part of the game world is being viewed
+        /// </summary>
+        public static Camera Camera { get; protected set; }
 
         public static string ContentRootDirectory { get { return "Content"; } }
 
@@ -90,6 +105,10 @@ namespace Engine
         {
             HandleInput();
             GameStateManager.Update(gameTime);
+            if(Camera != null) 
+            {
+                Camera.Update(gameTime);
+            }
         }
 
         /// <summary>
@@ -148,11 +167,21 @@ namespace Engine
 
             graphics.ApplyChanges();
 
-            // calculate and set the viewport to use
-            GraphicsDevice.Viewport = CalculateViewport(screenSize);
+            Point viewSize;
+            // calculate and set the viewport to use as well as choosing which size to scale to
+            if (Camera != null)
+            {
+                GraphicsDevice.Viewport = Camera.CalculateViewPort(screenSize);
+                viewSize = Camera.Size;
+            }
+            else
+            {
+                GraphicsDevice.Viewport = CalculateViewport(screenSize);
+                viewSize = worldSize;
+            }
 
             // calculate how the graphics should be scaled, so that the game world fits inside the window
-            spriteScale = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width / worldSize.X, (float)GraphicsDevice.Viewport.Height / worldSize.Y, 1);
+            spriteScale = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width / viewSize.X, (float)GraphicsDevice.Viewport.Height / viewSize.Y, 1);
         }
 
         /// <summary>
@@ -199,15 +228,32 @@ namespace Engine
         }
 
         /// <summary>
-        /// Converts a position in screen coordinates to a position in world coordinates.
+        /// Converts a position in screen coordinates to a position in world coordinates with the top left of the sreen being the top left of the world.
         /// </summary>
         /// <param name="screenPosition">A position in screen coordinates.</param>
         /// <returns>The corresponding position in world coordinates.</returns>
         public Vector2 ScreenToWorld(Vector2 screenPosition)
         {
             Vector2 viewportTopLeft = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
+
+            if (Camera != null)
+            {
+                float screenToCameraScale = Camera.Size.X / (float)GraphicsDevice.Viewport.Width;
+                return (screenPosition - viewportTopLeft) * screenToCameraScale;
+            }
             float screenToWorldScale = worldSize.X / (float)GraphicsDevice.Viewport.Width;
             return (screenPosition - viewportTopLeft) * screenToWorldScale;
+        }
+
+        /// <summary>
+        /// Converts a position in screen coordinates to a position in world coordinates with the top left of the screen being the top left of the camera view
+        /// </summary>
+        /// <param name="screenPosition">A position in screen coordinates.</param>
+        /// <returns>The corresponding position in world coordinates taking the position of the camera into account.</returns>
+        public Vector2 ScreenToCameraView(Vector2 screenPosition)
+        {
+            Vector2 positionWithinView = ScreenToWorld(screenPosition);
+            return (positionWithinView + Camera.GlobalPosition);
         }
     }
 }
