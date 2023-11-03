@@ -54,7 +54,10 @@ class PlayingState : GameState, IPlayingState
             else if (completedOverlay.Visible)
             {
                 if (inputHelper.KeyPressed(Keys.Space))
+                {
+                    game.ResetWorldSize();
                     ExtendedGameWithLevels.GoToNextLevel(level.LevelIndex);
+                }
             }
 
             // otherwise, update the level itself, and check for button presses
@@ -64,8 +67,8 @@ class PlayingState : GameState, IPlayingState
 
                 if (quitButton.Pressed)
                 {
-                    ExtendedGame.GameStateManager.SwitchTo(ExtendedGameWithLevels.StateName_LevelSelect);
                     game.ResetWorldSize();
+                    ExtendedGame.GameStateManager.SwitchTo(ExtendedGameWithLevels.StateName_LevelSelect);         
                 }
             }
         }
