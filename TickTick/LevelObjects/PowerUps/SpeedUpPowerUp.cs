@@ -9,13 +9,11 @@ internal class SpeedUpPowerUp : PowerUp
 
     protected override void ApplyPowerup()
     {
-        base.ApplyPowerup();
         level.Player.walkingSpeed = level.Player.walkingSpeed * 1.5f;
     }
 
     protected override void RemovePowerUp()
     {
-        base.RemovePowerUp();
         level.Player.walkingSpeed = level.Player.walkingSpeed / 1.5f;
     }
 }
