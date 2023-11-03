@@ -335,7 +335,7 @@ class Player : AnimatedGameObject
     /// </summary>
     /// <param name="velocity"></param>velocity of the object.
     /// <param name="gameTime"></param>
-    public void MoveWithObject(Vector2 velocity, GameTime gameTime, float yPosition)
+    public void MoveWithObject(Vector2 velocity, float yPosition)
     {
         objectVelocity = velocity;
         LocalPosition = new Vector2(LocalPosition.X, yPosition);
