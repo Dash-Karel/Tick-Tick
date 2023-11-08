@@ -88,14 +88,19 @@ abstract class Projectile : SpriteGameObject
                 if (!tileBounds.Intersects(bbox))
                     continue;
 
-                CollideWithTiles();
+                CollideWithEnemy();
                 
             }
         }
     }
 
-    protected virtual void CollideWithTiles()
+    protected virtual void CollideWithTile()
     {
         MarkedForRemoval = true;
+    }
+
+    public virtual void CollideWithEnemy()
+    {
+        MarkedForRemoval= true;
     }
 }

@@ -73,7 +73,7 @@ class Player : AnimatedGameObject
         isOnMovingObject = false;
 
         //test gun
-        Gun = new AssaultRifle(new Vector2(0, -Height / 2), level);
+        Gun = new BurstRifle(new Vector2(0, -Height / 2), level);
         Gun.Parent = this;
     }
 

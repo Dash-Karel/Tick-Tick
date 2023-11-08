@@ -38,17 +38,17 @@ abstract class Gun : SpriteGameObject
 
     protected string shootingSoundEffectName = "Sounds/snd_default_shooting";
 
+    /// <summary>
+    /// The time in seconds until the next shot can be fired
+    /// </summary>
+    protected float fireDelayTime;
+
     Vector2 basePosition;
 
     /// <summary>
     /// The rotation of the gun in radians
     /// </summary>
     float rotation;
-
-    /// <summary>
-    /// The time in seconds until the next shot can be fired
-    /// </summary>
-    float fireDelayTime;
 
     const float recoilResetSpeed = 5f;
 
@@ -106,7 +106,7 @@ abstract class Gun : SpriteGameObject
         }
     }
 
-    void PointToMouse(InputHelper inputHelper)
+    protected void PointToMouse(InputHelper inputHelper)
     {
         double opposite = inputHelper.MousePositionCameraView.Y - (GlobalPosition.Y + Origin.Y);
         double adjacent = inputHelper.MousePositionCameraView.X - GlobalPosition.X;
@@ -130,7 +130,7 @@ abstract class Gun : SpriteGameObject
         }
     }
 
-    void Shoot(InputHelper inputHelper)
+    protected void Shoot(InputHelper inputHelper)
     {
         TickTick.AssetManager.PlaySoundEffect(shootingSoundEffectName);
 

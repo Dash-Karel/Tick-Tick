@@ -4,17 +4,14 @@ using Microsoft.Xna.Framework;
 /// <summary>
 /// Represents a rocket enemy that flies horizontally through the screen.
 /// </summary>
-class Rocket : AnimatedGameObject
+class Rocket : Enemy
 {
-    Level level;
     Vector2 startPosition;
     const float speed = 500;
 
     public Rocket(Level level, Vector2 startPosition, bool facingLeft) 
-        : base(TickTick.Depth_LevelObjects)
+        : base(level)
     {
-        this.level = level;
-
         LoadAnimation("Sprites/LevelObjects/Rocket/spr_rocket@3", "rocket", true, 0.1f);
         PlayAnimation("rocket");
         SetOriginToCenter();
@@ -35,15 +32,17 @@ class Rocket : AnimatedGameObject
 
     public override void Reset()
     {
+        base.Reset();
+
         // go back to the starting position
         LocalPosition = startPosition;
     }
 
     public override void Update(GameTime gameTime)
     {
-        base.Update(gameTime);
+        if (!IsAlive) return;
 
-        Visible = false;
+        base.Update(gameTime);
 
         // if the rocket has left the screen, reset it
         if (sprite.Mirror && BoundingBox.Right < level.BoundingBox.Left)

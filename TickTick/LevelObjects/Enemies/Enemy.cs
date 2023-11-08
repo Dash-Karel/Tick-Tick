@@ -36,6 +36,7 @@ abstract internal class Enemy : AnimatedGameObject
             if(HasPixelPreciseCollision(projectile))
             {
                 Die();
+                projectile.CollideWithEnemy();
             }
         }
     }
@@ -43,5 +44,11 @@ abstract internal class Enemy : AnimatedGameObject
     void Die()
     {
         IsAlive = false;
+        TickTick.AssetManager.PlaySoundEffect("Sounds/snd_enemy_death");
+    }
+
+    public override void Reset()
+    {
+        IsAlive = true;
     }
 }

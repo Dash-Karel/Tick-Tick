@@ -4,15 +4,14 @@ using Microsoft.Xna.Framework;
 /// <summary>
 /// An enemy that patrols back and forth on a platform.
 /// </summary>
-class PatrollingEnemy : AnimatedGameObject
-{
-    protected Level level; 
+class PatrollingEnemy : Enemy
+{ 
     Vector2 startPosition; // The position at which this enemy starts.
     protected float waitTime; // The current remaining time before the enemy turns around.
     const float totalWaitTime = 0.5f; // The time it takes before the enemy turns around.
     const float walkSpeed = 120; // The horizontal speed at which the enemy moves.
 
-    public PatrollingEnemy(Level level, Vector2 startPosition) : base(TickTick.Depth_LevelObjects)
+    public PatrollingEnemy(Level level, Vector2 startPosition) : base(level)
     {
         this.level = level;
         this.startPosition = startPosition;
@@ -24,6 +23,8 @@ class PatrollingEnemy : AnimatedGameObject
 
     public override void Reset()
     {
+        base.Reset();
+
         // start by moving to the right
         waitTime = 0;
         velocity.X = walkSpeed;
@@ -37,6 +38,9 @@ class PatrollingEnemy : AnimatedGameObject
 
     public override void Update(GameTime gameTime)
     {
+        if(!IsAlive) 
+            return;
+
         base.Update(gameTime);
 
         // if we're waiting at the edge of a platform, turn around after some time
