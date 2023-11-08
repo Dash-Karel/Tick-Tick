@@ -1,5 +1,6 @@
 using Engine;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
@@ -26,6 +27,8 @@ class Player : AnimatedGameObject
     
     bool isCelebrating; // Whether or not the player is celebrating a level victory.
     bool isExploding;
+
+    public Gun Gun { get; private set; }
 
     public bool IsAlive { get; private set; }
 
@@ -68,22 +71,29 @@ class Player : AnimatedGameObject
         isCelebrating = false;
         IsRising = false;
         isOnMovingObject = false;
+
+        //test gun
+        Gun = new AssaultRifle(new Vector2(0, -Height / 2), level);
+        Gun.Parent = this;
     }
 
     public override void HandleInput(InputHelper inputHelper)
     {
+        if(Gun != null)
+            Gun.HandleInput(inputHelper);
+
         if (!CanCollideWithObjects)
             return;
 
-        // arrow keys: move left or right
-        if (inputHelper.KeyDown(Keys.Left))
+        // arrow keys: move left or right(or alternative WASD layout)
+        if (inputHelper.KeyDown(Keys.Left) || inputHelper.KeyDown(Keys.A))
         {
             facingLeft = true;
             desiredHorizontalSpeed = -walkingSpeed;
             if (isGrounded)
                 PlayAnimation("run");
         }
-        else if (inputHelper.KeyDown(Keys.Right))
+        else if (inputHelper.KeyDown(Keys.Right) || inputHelper.KeyDown(Keys.D))
         {
             facingLeft = false;
             desiredHorizontalSpeed = walkingSpeed;
@@ -139,9 +149,17 @@ class Player : AnimatedGameObject
     {
         Origin = new Vector2(sprite.Width / 2, sprite.Height);
     }
+    public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+    {
+        base.Draw(gameTime, spriteBatch);
+        if (Gun != null)
+            Gun.Draw(gameTime, spriteBatch);
+    }
     public override void Update(GameTime gameTime)
     {
-        
+        if(Gun != null)
+            Gun.Update(gameTime);
+
         Vector2 previousPosition = localPosition;
 
         if (CanCollideWithObjects)
@@ -295,6 +313,8 @@ class Player : AnimatedGameObject
 
     public void Die()
     {
+        Gun.Visible = false;
+
         IsAlive = false;
         PlayAnimation("die");
         velocity = new Vector2(0, -jumpSpeed);
@@ -305,6 +325,8 @@ class Player : AnimatedGameObject
 
     public void Explode()
     {
+        Gun.Visible = false;
+
         IsAlive = false;
         isExploding = true;
         PlayAnimation("explode");

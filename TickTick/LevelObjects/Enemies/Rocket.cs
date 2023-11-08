@@ -43,6 +43,8 @@ class Rocket : AnimatedGameObject
     {
         base.Update(gameTime);
 
+        Visible = false;
+
         // if the rocket has left the screen, reset it
         if (sprite.Mirror && BoundingBox.Right < level.BoundingBox.Left)
             Reset();
