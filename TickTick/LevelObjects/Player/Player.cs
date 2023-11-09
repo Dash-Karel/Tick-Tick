@@ -7,6 +7,7 @@ using System;
 class Player : AnimatedGameObject
 {
     public float walkingSpeed = 400; // Standard walking speed, in game units per second.
+    const float backwardsWalkingMultiplier = 0.7f; //The multiplier that gets applied to the walkingSpeed when walking backwards
     const float jumpSpeed = 900; // Lift-off speed when the character jumps.
     const float gravity = 2300; // Strength of the gravity force that pulls the character down.
     const float maxFallSpeed = 1200; // The maximum vertical speed at which the character can fall.
@@ -121,7 +122,14 @@ class Player : AnimatedGameObject
         SetOriginToBottomCenter();
 
         // make sure the sprite is facing the correct direction
-        sprite.Mirror = facingLeft;
+        if (Gun != null)
+            sprite.Mirror = Gun.Mirror;
+        else
+            sprite.Mirror = facingLeft;
+
+        //Move slower if not facing the way you are moving
+        if (sprite.Mirror != facingLeft)
+            desiredHorizontalSpeed *= backwardsWalkingMultiplier;
     }
 
     public void Jump(float speed = jumpSpeed)

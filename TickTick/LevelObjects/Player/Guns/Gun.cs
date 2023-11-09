@@ -7,15 +7,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 abstract class Gun : SpriteGameObject
 {
-    protected enum ProjectileType { bullet, portal}
+    protected enum ProjectileType { bullet, portal }
 
-    Level level;
+    //make mirror accessible in order to let player face the right direction
+    public bool Mirror { get { return sprite.Mirror; } }
 
     /// <summary>
     /// A list that contains all projectiles that have been shot and are not yet destroyed
     /// </summary>
     public List<Projectile> ActiveProjectiles { get; private set; }
 
+    //a reference to the level to pass to the projectiles
+    Level level;
+
+    //A special kind of text game object to display the amount of ammo left
+    AmmoDisplay ammoDisplay;
+
+    /// <summary>
+    /// What kind of projectile the weapon will shoot
+    /// </summary>
     protected ProjectileType projectileType;
 
     /// <summary>
@@ -23,20 +33,29 @@ abstract class Gun : SpriteGameObject
     /// </summary>
     protected Vector2 barrelOffset;
 
+    /// <summary>
+    /// The amount of bullets the gun can fire until it is empty
+    /// </summary>
+    protected int magazineSize = 10;
 
     /// <summary>
     /// fire rate in rounds per second
     /// </summary>
-    protected float fireRate;
+    protected float fireRate = 1f;
 
-    protected float recoilForce;
+    /// <summary>
+    /// How far the gun moves back when fired
+    /// </summary>
+    protected float recoilForce = 10f;
 
     /// <summary>
     /// Whether you can hold the mouse button to auto fire
     /// </summary>
-    protected bool fullAuto;
+    protected bool fullAuto = false;
 
     protected string shootingSoundEffectName = "Sounds/snd_default_shooting";
+
+    protected string magazineEmptySoundEffectName = "Sounds/snd_default_empty";
 
     /// <summary>
     /// The time in seconds until the next shot can be fired
@@ -50,15 +69,20 @@ abstract class Gun : SpriteGameObject
     /// </summary>
     float rotation;
 
+    /// <summary>
+    /// The amount of bullets left in the magazine
+    /// </summary>
+    int bulletsLeft;
+
     const float recoilResetSpeed = 5f;
 
 
 
     public Gun(string spriteName, Vector2 basePosition, Level level) : base(spriteName, TickTick.Depth_LevelPlayer + 0.01f)
     {
-        ActiveProjectiles = new List<Projectile>();
         this.basePosition = basePosition;
         this.level = level;
+        Reset();
     }
 
     public override void HandleInput(InputHelper inputHelper)
@@ -80,11 +104,13 @@ abstract class Gun : SpriteGameObject
             ActiveProjectiles[i].Update(gameTime);
             if (ActiveProjectiles[i].MarkedForRemoval)
                 ActiveProjectiles.RemoveAt(i--);
-
         }
 
         //make sure gun moves back after recoil
         velocity = (basePosition - localPosition) * recoilResetSpeed;
+
+        //update the display to show the ammo left
+        ammoDisplay.SyncDisplay(bulletsLeft);
 
         base.Update(gameTime);
     }
@@ -92,6 +118,8 @@ abstract class Gun : SpriteGameObject
     //override Draw to take rotation into account
     public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
+        ammoDisplay.Draw(gameTime, spriteBatch);
+
         if (!Visible)
             return;
 
@@ -104,6 +132,13 @@ abstract class Gun : SpriteGameObject
         {
             ActiveProjectiles[i].Draw(gameTime, spriteBatch);
         }
+    }
+
+    public override void Reset()
+    {
+        ammoDisplay = new AmmoDisplay(magazineSize);
+        ActiveProjectiles = new List<Projectile>();
+        bulletsLeft = magazineSize;
     }
 
     protected void PointToMouse(InputHelper inputHelper)
@@ -132,17 +167,26 @@ abstract class Gun : SpriteGameObject
 
     protected void Shoot(InputHelper inputHelper)
     {
-        TickTick.AssetManager.PlaySoundEffect(shootingSoundEffectName);
+        if (bulletsLeft > 0)
+        {
+            bulletsLeft--;
 
-        Vector2 projectileDirection = inputHelper.MousePositionCameraView - (GlobalPosition + new Vector2(0, barrelOffset.Y));
-        projectileDirection.Normalize();
-        Vector2 projectilePosition = GlobalPosition + new Vector2(0, barrelOffset.Y) + projectileDirection * Width;
-        Projectile projectile = NewProjectile(projectileType, projectilePosition);
-        projectile.StartFlying(projectileDirection); 
-        ActiveProjectiles.Add(projectile);
+            TickTick.AssetManager.PlaySoundEffect(shootingSoundEffectName);
 
-        //apply recoil
-        localPosition -= projectileDirection * recoilForce;
+            Vector2 projectileDirection = inputHelper.MousePositionCameraView - (GlobalPosition + new Vector2(0, barrelOffset.Y));
+            projectileDirection.Normalize();
+            Vector2 projectilePosition = GlobalPosition + new Vector2(0, barrelOffset.Y) + projectileDirection * Width;
+            Projectile projectile = NewProjectile(projectileType, projectilePosition);
+            projectile.StartFlying(projectileDirection);
+            ActiveProjectiles.Add(projectile);
+
+            //apply recoil
+            localPosition -= projectileDirection * recoilForce;
+        }
+        else if(inputHelper.MouseLeftButtonPressed())
+        {
+            TickTick.AssetManager.PlaySoundEffect(magazineEmptySoundEffectName);
+        }
     }
 
     Projectile NewProjectile(ProjectileType type, Vector2 startPosition)

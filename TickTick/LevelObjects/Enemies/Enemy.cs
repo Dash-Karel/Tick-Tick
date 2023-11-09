@@ -33,7 +33,7 @@ abstract internal class Enemy : AnimatedGameObject
         //Check for collisions with bullets
         foreach(Projectile projectile in level.Player.Gun.ActiveProjectiles)
         {
-            if(HasPixelPreciseCollision(projectile))
+            if(HasPixelPreciseCollision(projectile.BoundingBox))
             {
                 Die();
                 projectile.CollideWithEnemy();
