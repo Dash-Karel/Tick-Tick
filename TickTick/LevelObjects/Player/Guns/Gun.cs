@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 abstract class Gun : SpriteGameObject
@@ -75,8 +74,6 @@ abstract class Gun : SpriteGameObject
     int bulletsLeft;
 
     const float recoilResetSpeed = 5f;
-
-
 
     public Gun(string spriteName, Vector2 basePosition, Level level) : base(spriteName, TickTick.Depth_LevelPlayer + 0.01f)
     {
@@ -199,7 +196,6 @@ abstract class Gun : SpriteGameObject
                 return null;
         }
     }
-
 
     void SetOriginLeft()
     {
