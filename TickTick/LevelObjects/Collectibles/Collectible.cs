@@ -2,13 +2,13 @@
 using Microsoft.Xna.Framework;
 using Engine;
 
-class WaterDrop : SpriteGameObject
+abstract internal class Collectible : SpriteGameObject
 {
-    Level level;
+    protected Level level;
     protected float bounce;
     Vector2 startPosition;
 
-    public WaterDrop(Level level, Vector2 startPosition) : base("Sprites/LevelObjects/spr_water", TickTick.Depth_LevelObjects)
+    public Collectible(Level level, Vector2 startPosition, string spriteName) : base(spriteName, TickTick.Depth_LevelObjects)
     {
         this.level = level;
         this.startPosition = startPosition;
@@ -26,13 +26,12 @@ class WaterDrop : SpriteGameObject
         bounce = (float)Math.Sin(t) * 0.2f;
         localPosition.Y += bounce;
 
-        // check if the player collects this water drop
+        // check if the player collects this collectible
         if (Visible && level.Player.CanCollideWithObjects && HasPixelPreciseCollision(level.Player))
         {
             Visible = false;
-            ExtendedGame.AssetManager.PlaySoundEffect("Sounds/snd_watercollected");
+            Collect();
         }
-            
     }
 
     public override void Reset()
@@ -40,4 +39,9 @@ class WaterDrop : SpriteGameObject
         localPosition = startPosition;
         Visible = true;
     }
+
+    /// <summary>
+    /// The method that gets called when the player collects the collectable
+    /// </summary>
+    protected abstract void Collect();
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +11,9 @@ abstract class Gun : SpriteGameObject
 
     //make mirror accessible in order to let player face the right direction
     public bool Mirror { get { return sprite.Mirror; } }
+
+    //returns whether the magazine is at full capacity
+    public bool MagazineIsFull { get { return bulletsLeft == magazineSize; } }
 
     /// <summary>
     /// A list that contains all projectiles that have been shot and are not yet destroyed
@@ -38,6 +42,11 @@ abstract class Gun : SpriteGameObject
     protected int magazineSize = 10;
 
     /// <summary>
+    /// The duration of the reload in seconds
+    /// </summary>
+    protected float reloadDuration = 1.5f;
+
+    /// <summary>
     /// fire rate in rounds per second
     /// </summary>
     protected float fireRate = 1f;
@@ -56,6 +65,8 @@ abstract class Gun : SpriteGameObject
 
     protected string magazineEmptySoundEffectName = "Sounds/snd_default_empty";
 
+    public string reloadSoundEffectName { get; private set; } = "Sounds/snd_default_reload";
+
     /// <summary>
     /// The time in seconds until the next shot can be fired
     /// </summary>
@@ -72,6 +83,10 @@ abstract class Gun : SpriteGameObject
     /// The amount of bullets left in the magazine
     /// </summary>
     int bulletsLeft;
+
+    bool reloading;
+
+    float reloadTimeLeft;
 
     const float recoilResetSpeed = 5f;
 
@@ -94,9 +109,20 @@ abstract class Gun : SpriteGameObject
 
     public override void Update(GameTime gameTime)
     {
+        if (reloading)
+        {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            rotation += 2 * MathF.PI / reloadDuration * deltaTime;
+            reloadTimeLeft -= deltaTime;
+            if(reloadTimeLeft <= 0)
+            {
+                reloading = false;
+            }
+        }
+
         fireDelayTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        for(int i = 0; i < ActiveProjectiles.Count; i++)
+        for (int i = 0; i < ActiveProjectiles.Count; i++)
         {
             ActiveProjectiles[i].Update(gameTime);
             if (ActiveProjectiles[i].MarkedForRemoval)
@@ -138,8 +164,19 @@ abstract class Gun : SpriteGameObject
         bulletsLeft = magazineSize;
     }
 
+    public void Reload()
+    {
+        bulletsLeft = magazineSize;
+        TickTick.AssetManager.PlaySoundEffect(reloadSoundEffectName);
+        reloading = true;
+        reloadTimeLeft = reloadDuration;
+
+    }
+
     protected void PointToMouse(InputHelper inputHelper)
     {
+        if (reloading)
+            return;
         double opposite = inputHelper.MousePositionCameraView.Y - (GlobalPosition.Y + Origin.Y);
         double adjacent = inputHelper.MousePositionCameraView.X - GlobalPosition.X;
         float actualRotation = (float)Math.Atan2(opposite, adjacent);
@@ -164,6 +201,9 @@ abstract class Gun : SpriteGameObject
 
     protected void Shoot(InputHelper inputHelper)
     {
+        if (reloading)
+            return;
+
         if (bulletsLeft > 0)
         {
             bulletsLeft--;
@@ -180,7 +220,7 @@ abstract class Gun : SpriteGameObject
             //apply recoil
             localPosition -= projectileDirection * recoilForce;
         }
-        else if(inputHelper.MouseLeftButtonPressed())
+        else if(!fullAuto || inputHelper.MouseLeftButtonPressed())
         {
             TickTick.AssetManager.PlaySoundEffect(magazineEmptySoundEffectName);
         }

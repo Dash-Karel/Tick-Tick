@@ -31,7 +31,7 @@ class Player : AnimatedGameObject
     bool isCelebrating; // Whether or not the player is celebrating a level victory.
     bool isExploding;
 
-    public Gun Gun { get; private set; }
+    public Gun Gun { get; set; }
 
     public bool IsAlive { get; private set; }
 
@@ -57,6 +57,9 @@ class Player : AnimatedGameObject
 
     public override void Reset()
     {
+        //remove the gun
+        Gun = null;
+
         // go back to the starting position
         localPosition = startPosition;
         velocity = Vector2.Zero;
@@ -74,10 +77,6 @@ class Player : AnimatedGameObject
         isCelebrating = false;
         IsRising = false;
         isOnMovingObject = false;
-
-        //test gun
-        Gun = new BurstRifle(new Vector2(0, -Height / 2), level);
-        Gun.Parent = this;
     }
 
     public override void HandleInput(InputHelper inputHelper)

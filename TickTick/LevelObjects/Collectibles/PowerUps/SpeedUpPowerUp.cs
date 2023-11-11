@@ -2,7 +2,7 @@
 
 internal class SpeedUpPowerUp : PowerUp
 {
-    public SpeedUpPowerUp(Level level, Vector2 startposition) : base(level, "Sprites/LevelObjects/PowerUps/speedUp", startposition)
+    public SpeedUpPowerUp(Level level, Vector2 startPosition) : base(level, startPosition, "Sprites/LevelObjects/PowerUps/speedUp")
     {
         powerUpDuration = 5;
     }

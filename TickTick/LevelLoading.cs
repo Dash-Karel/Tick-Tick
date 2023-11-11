@@ -1,5 +1,6 @@
 ﻿using Engine;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -121,7 +122,11 @@ partial class Level : GameObjectList
         else if (symbol == 'A' || symbol == 'B' || symbol == 'C')
             LoadFlameEnemy(x, y, symbol);
         else if (symbol == 's')
-            LoadSpeedPowerUp(x,y);
+            LoadSpeedPowerUp(x, y);
+        else if (symbol == 'a')
+            LoadAssaultRifleCollectible(x, y);
+        else if (symbol == 'b')
+            LoadAmmoCollectible(x, y);
     }
 
     Tile CharToStaticTile(char symbol)
@@ -177,12 +182,30 @@ partial class Level : GameObjectList
     }
     void LoadSpeedPowerUp(int x, int y)
     {
-        // create the speed powerup drop object;  place it around the center of the tile
+        // create the speed powerup object;  place it around the center of the tile
         Vector2 pos = GetCellPosition(x, y) + new Vector2(TileWidth / 2, TileHeight / 3);
         SpeedUpPowerUp s = new SpeedUpPowerUp(this, pos);
         // add it to the game world
         AddChild(s);
     }
+    void LoadAssaultRifleCollectible(int x, int y)
+    {
+        // create the GunCollectible object;  place it around the center of the tile
+        Vector2 pos = GetCellPosition(x, y) + new Vector2(TileWidth / 2, TileHeight / 3);
+        GunCollectible s = new GunCollectible(this, pos, "Sprites/LevelObjects/Player/Guns/AssaultRifle", typeof(AssaultRifle));
+        // add it to the game world
+        AddChild(s);
+    }
+
+    private void LoadAmmoCollectible(int x, int y)
+    {
+        // create the AmmoCollectible object;  place it around the center of the tile
+        Vector2 pos = GetCellPosition(x, y) + new Vector2(TileWidth / 2, TileHeight / 3);
+        AmmoCollectible s = new AmmoCollectible(this, pos);
+        // add it to the game world
+        AddChild(s);
+    }
+
 
     void LoadRocketEnemy(int x, int y)
     {
