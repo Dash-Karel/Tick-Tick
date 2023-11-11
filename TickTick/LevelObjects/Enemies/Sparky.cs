@@ -4,9 +4,8 @@ using Microsoft.Xna.Framework;
 /// <summary>
 /// Represents the "Sparky" enemy that can drop down and electrocute the player.
 /// </summary>
-class Sparky : AnimatedGameObject
+class Sparky : Enemy
 {
-    Level level;
     Vector2 basePosition; // The bottom-most position that Sparky can reach.
     
     float timeUntilDrop; // The current remaining time until Sparky drops down.
@@ -14,9 +13,8 @@ class Sparky : AnimatedGameObject
     const float floatingHeight = 120; // The height at which Sparky floats above the ground.
     const float fallSpeed = 300, riseSpeed = 60; // The speed for falling and rising.
 
-    public Sparky(Level level, Vector2 basePosition) : base(TickTick.Depth_LevelObjects)
+    public Sparky(Level level, Vector2 basePosition) : base(level)
     {
-        this.level = level;
         this.basePosition = basePosition;
 
         LoadAnimation("Sprites/LevelObjects/Sparky/spr_electrocute@6x5", "electrocute", false, 0.1f);
@@ -26,6 +24,8 @@ class Sparky : AnimatedGameObject
 
     public override void Reset()
     {
+        base.Reset();
+
         // play the idle animation
         PlayAnimation("idle");
         
@@ -41,6 +41,9 @@ class Sparky : AnimatedGameObject
 
     public override void Update(GameTime gameTime)
     {
+        if (!IsAlive)
+            return;
+
         base.Update(gameTime);
 
         if (timeUntilDrop > 0)

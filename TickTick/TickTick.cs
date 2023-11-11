@@ -63,7 +63,7 @@ class TickTick : ExtendedGameWithLevels
         GameStateManager.SwitchTo(StateName_Title);
 
         // play background music
-        AssetManager.PlaySong("Sounds/snd_music", true);
+        //AssetManager.PlaySong("Sounds/snd_music", true);
     }
 
 

@@ -33,6 +33,12 @@
 #begin Levels/level11.txt
 /copy:Levels/level11.txt
 
+#begin Sounds/snd_assault_rifle.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_assault_rifle.wav
+
 #begin Sounds/snd_beep_high.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -44,6 +50,42 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/snd_beep.wav
+
+#begin Sounds/snd_big_gun.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_big_gun.wav
+
+#begin Sounds/snd_default_empty.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_default_empty.wav
+
+#begin Sounds/snd_default_shooting.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_default_shooting.wav
+
+#begin Sounds/snd_enemy_death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_enemy_death.wav
+
+#begin Sounds/snd_enemy_death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_enemy_death.wav
+
+#begin Sounds/snd_machine_pistol.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_machine_pistol.wav
 
 #begin Sounds/snd_music.mp3
 /importer:Mp3Importer
@@ -224,6 +266,54 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/LevelObjects/Flame/spr_flame@9.png
+
+#begin Sprites/LevelObjects/Player/Guns/AssaultRifle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/Player/Guns/AssaultRifle.png
+
+#begin Sprites/LevelObjects/Player/Guns/bullet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/Player/Guns/bullet.png
+
+#begin Sprites/LevelObjects/Player/Guns/BurstRifle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/Player/Guns/BurstRifle.png
+
+#begin Sprites/LevelObjects/Player/Guns/MachinePistol.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/Player/Guns/MachinePistol.png
 
 #begin Sprites/LevelObjects/Player/spr_celebrate@14.png
 /importer:TextureImporter
@@ -476,6 +566,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/Tiles/spr_wall.png
+
+#begin Sprites/UI/spr_ammo.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/UI/spr_ammo.png
 
 #begin Sprites/UI/spr_button_back.png
 /importer:TextureImporter

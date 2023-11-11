@@ -150,7 +150,7 @@ partial class Level : GameObjectList
         // create the bomb character
         Player = new Player(this, GetCellBottomCenter(x, y));
         AddChild(Player);
-        
+
         //make sure the camera follows the player
         TickTick.Camera.Subject = Player;
     }

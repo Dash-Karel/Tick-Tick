@@ -5,17 +5,15 @@ using Microsoft.Xna.Framework;
 /// Represents a turtle enemy that sneezes periodically.
 /// It can be used as a trampoline whenever it's not sneezing.
 /// </summary>
-class Turtle : AnimatedGameObject
+class Turtle : Enemy
 {
-    Level level; // A reference to the level in which the enemy lives.
     bool sneezing; // Whether the sneeze animation is currently being shown.
     float timer; // The remaining time before switching to another state.
     const float timeBetweenStates = 5.0f; // The time between the "sneeze" and "idle" states.
     const float launchSpeed = 1200; // The speed at which the player can get launched.
 
-    public Turtle(Level level) : base(TickTick.Depth_LevelObjects)
+    public Turtle(Level level) : base(level)
     {
-        this.level = level;
         LoadAnimation("Sprites/LevelObjects/Turtle/spr_sneeze@9", "sneeze", false, 0.2f);
         LoadAnimation("Sprites/LevelObjects/Turtle/spr_idle", "idle", true, 0.1f);
         Reset();
@@ -23,6 +21,8 @@ class Turtle : AnimatedGameObject
 
     public override void Reset()
     {
+        base.Reset();
+
         // go to the "idle" state
         sneezing = false;
         timer = timeBetweenStates;
@@ -33,6 +33,9 @@ class Turtle : AnimatedGameObject
 
     public override void Update(GameTime gameTime)
     {
+        if (!IsAlive)
+            return;
+
         base.Update(gameTime);
         
         // choose the correct animation to play
