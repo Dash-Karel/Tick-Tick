@@ -17,10 +17,12 @@ class Player : AnimatedGameObject
     bool facingLeft; // Whether or not the character is currently looking to the left.
 
     bool isGrounded; // Whether or not the character is currently standing on something.
-    bool isOnMovingObject;
     bool standingOnIceTile, standingOnHotTile; // Whether or not the character is standing on an ice tile or a hot tile.
     float desiredHorizontalSpeed; // The horizontal speed at which the character would like to move.
-
+    
+    bool isOnMovingObject;
+    Vector2 objectVelocity;
+    
     Level level;
     Vector2 startPosition;
     
@@ -154,7 +156,9 @@ class Player : AnimatedGameObject
                 ApplyGravity(gameTime);
 
         base.Update(gameTime);
-        if (isGrounded &&!IsRising)
+        if (isOnMovingObject)
+            LocalPosition += objectVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (isGrounded &&!IsRising) 
             velocity.Y = 0;
         if (IsFalling)
             IsRising = false;
@@ -245,8 +249,8 @@ class Player : AnimatedGameObject
                 // if the x-component is smaller, treat this as a horizontal collision
                 if (overlap.Width < overlap.Height)
                 {
-                    if ((velocity.X >= 0 && bbox.Center.X < tileBounds.Left) || // right wall
-                        (velocity.X <= 0 && bbox.Center.X > tileBounds.Right)) // left wall
+                    if ((bbox.Center.X < tileBounds.Left) || // right wall of the world
+                        (bbox.Center.X > tileBounds.Right)) // left wall of the world
                     {
                         localPosition.X = previousPosition.X;
                         velocity.X = 0;
@@ -331,10 +335,10 @@ class Player : AnimatedGameObject
     /// </summary>
     /// <param name="velocity"></param>velocity of the object.
     /// <param name="gameTime"></param>
-    public void MoveWithObject(Vector2 velocity, GameTime gameTime)
+    public void MoveWithObject(Vector2 velocity, float yPosition)
     {
-        LocalPosition += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        
+        objectVelocity = velocity;
+        LocalPosition = new Vector2(LocalPosition.X, yPosition);
         isOnMovingObject = true;
         
     }

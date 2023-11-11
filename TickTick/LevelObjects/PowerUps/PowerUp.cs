@@ -14,7 +14,7 @@ internal abstract class PowerUp : SpriteGameObject
     {
         this.level = level;
         this.startPosition = startposition;
-        isApllied = false;
+        
 
         SetOriginToCenter();
 
@@ -27,27 +27,27 @@ internal abstract class PowerUp : SpriteGameObject
         if (Visible && level.Player.CanCollideWithObjects && HasPixelPreciseCollision(level.Player))
         {
             ApplyPowerup();
+            Visible = false;
+            isApllied = true;
+            if (timer <= 0)
+                timer = powerUpDuration;
         }
         if (timer > 0)
         {
             timer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (timer <= 0) 
+            if (timer <= 0)
+            {
                 RemovePowerUp();
+                isApllied = false;
+            }
+                
         }
     }
-    protected virtual void ApplyPowerup()
-    {
-        Visible = false;
-        isApllied = true;
-        Debug.WriteLine("speeeeeeeeeeed");
-        if (timer <= 0)
-            timer = powerUpDuration;
-    }
+    protected abstract void ApplyPowerup();
 
-    protected virtual void RemovePowerUp()
-    {
-        isApllied = false;
-    }
+
+    protected abstract void RemovePowerUp();
+    
 
     public override void Reset()
     {
@@ -57,5 +57,6 @@ internal abstract class PowerUp : SpriteGameObject
 
         localPosition = startPosition;
         Visible = true;
+        isApllied = false;
     }
 }
