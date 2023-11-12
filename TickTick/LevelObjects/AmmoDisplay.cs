@@ -1,7 +1,5 @@
 ﻿using Engine;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 internal class AmmoDisplay : GameObjectList
 {
@@ -23,6 +21,10 @@ internal class AmmoDisplay : GameObjectList
         AddChild(label);
     }
 
+    /// <summary>
+    /// Updates the text
+    /// </summary>
+    /// <param name="bulletsLeft">The number that gets shown to the left side of the slash</param>
     public void SyncDisplay(int bulletsLeft)
     {
         label.Text = bulletsLeft + "/" + magSize;

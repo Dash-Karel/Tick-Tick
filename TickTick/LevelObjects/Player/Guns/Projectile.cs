@@ -15,16 +15,23 @@ abstract class Projectile : SpriteGameObject
     protected Level level;
 
     float rotation;
+
     protected Projectile(Vector2 startPosition, string spriteName,Level level) : base(spriteName, TickTick.Depth_LevelPlayer)
     {
         SetOriginToCenter();
         localPosition = startPosition;
         this.level = level;
     }
+
+    /// <summary>
+    /// Counts down timeToLive, handles collisions and adds gravity to the projectile
+    /// </summary>
+    /// <param name="gameTime"></param>
     public override void Update(GameTime gameTime)
     {
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
         timeToLive -= deltaTime;
+        //If the timeToLive is depleted the projectile should be removed
         if (timeToLive < 0)
         {
             MarkedForRemoval = true;
@@ -33,6 +40,7 @@ abstract class Projectile : SpriteGameObject
 
         Vector2 previousPosition = localPosition;
 
+        //Add gravity if desired
         if (useGravity)
         {
             velocity.Y += gravityStrength * deltaTime;
@@ -43,6 +51,10 @@ abstract class Projectile : SpriteGameObject
         HandleTileCollisions(previousPosition);
     }
 
+    /// <summary>
+    /// Launch the projectile in the direction specified at the standard speed of the projectile
+    /// </summary>
+    /// <param name="direction"></param>
     public void StartFlying(Vector2 direction)
     {
         direction.Normalize();
@@ -95,11 +107,18 @@ abstract class Projectile : SpriteGameObject
         }
     }
 
+    /// <summary>
+    /// Called when colliding with a tile
+    /// </summary>
     protected virtual void CollideWithTile()
     {
         MarkedForRemoval = true;
     }
 
+    /// <summary>
+    /// Called by the enemy that collides with the projectile
+    /// </summary>
+    /// <param name="enemy"></param>
     public virtual void CollideWithEnemy(Enemy enemy)
     {
         MarkedForRemoval = true;

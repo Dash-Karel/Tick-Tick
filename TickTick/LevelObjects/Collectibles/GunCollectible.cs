@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 
 internal class GunCollectible : Collectible
 {
+    /// <summary>
+    /// The type of the object that gets instantiated on Collect()
+    /// </summary>
     Type type;
     public GunCollectible(Level level, Vector2 startPosition, string spriteName, Type gunType) : base(level, startPosition, spriteName)
     {
