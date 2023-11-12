@@ -54,10 +54,10 @@ class Rocket : Enemy
         if (level.Player.CanCollideWithObjects && HasPixelPreciseCollision(level.Player))
         {
             //Checks if the player is above the sprite
-            if (level.Player.LocalPosition.Y < LocalPosition.Y)
+            if (level.Player.GlobalPosition.Y < GlobalPosition.Y)
             {
                 // moves the player with the rocket
-                level.Player.MoveWithObject(velocity.X, LocalPosition.Y - Height/4);
+                level.Player.MoveWithObject(velocity.X, GlobalPosition.Y - Height/4);
             }
             else
             {

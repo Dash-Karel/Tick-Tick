@@ -7,7 +7,7 @@ internal class SpeedUpPowerUp : PowerUp
         powerUpDuration = 5;
     }
 
-    protected override void ApplyPowerup()
+    protected override void ApplyPowerUp()
     {
         level.Player.walkingSpeed = level.Player.walkingSpeed * 1.5f;
     }

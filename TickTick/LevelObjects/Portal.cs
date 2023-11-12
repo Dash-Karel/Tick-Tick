@@ -19,9 +19,10 @@ internal class Portal : Collectible
     {
         if (WaitTimeLeft <= 0 && LinkedPortal != null)
         {
-            level.Player.LocalPosition = LinkedPortal.GlobalPosition + level.Player.Origin - level.Player.BoundingBox.Size.ToVector2() / 2;
+            level.Player.LocalPosition = LinkedPortal.GlobalPosition + level.Player.Origin - level.Player.BoundingBox.Size.ToVector2() * 0.6f;
             WaitTimeLeft = waitDuration;
             LinkedPortal.WaitTimeLeft = waitDuration;
+            TickTick.AssetManager.PlaySoundEffect("Sounds/snd_teleport");
         }
         Visible = true;
     }

@@ -120,6 +120,12 @@
 /processorParam:Quality=Best
 /build:Sounds/snd_reload.mp3;Sounds/snd_default_reload.mp3
 
+#begin Sounds/snd_teleport.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_teleport.wav
+
 #begin Sounds/snd_watercollected.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

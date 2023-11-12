@@ -25,13 +25,13 @@ internal abstract class PowerUp : Collectible
 
     protected override void Collect()
     {
-        ApplyPowerup();
+        ApplyPowerUp();
         isApllied = true;
         if (timer <= 0)
             timer = powerUpDuration;
     }
 
-    protected abstract void ApplyPowerup();
+    protected abstract void ApplyPowerUp();
 
 
     protected abstract void RemovePowerUp();
