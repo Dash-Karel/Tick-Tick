@@ -7,12 +7,12 @@ abstract class Projectile : SpriteGameObject
 {
     public bool MarkedForRemoval { get; private set; } = false;
 
-    protected float timeToLive = 2f;
+    protected float timeToLive = 3f;
     protected float travelSpeed;
     protected float gravityStrength = 1000f;
     protected bool useGravity;
 
-    Level level;
+    protected Level level;
 
     float rotation;
     protected Projectile(Vector2 startPosition, string spriteName,Level level) : base(spriteName, TickTick.Depth_LevelPlayer)
@@ -88,7 +88,8 @@ abstract class Projectile : SpriteGameObject
                 if (!tileBounds.Intersects(bbox))
                     continue;
 
-                CollideWithEnemy();
+                CollideWithTile();
+                return;
                 
             }
         }
@@ -99,8 +100,9 @@ abstract class Projectile : SpriteGameObject
         MarkedForRemoval = true;
     }
 
-    public virtual void CollideWithEnemy()
+    public virtual void CollideWithEnemy(Enemy enemy)
     {
-        MarkedForRemoval= true;
+        MarkedForRemoval = true;
+        enemy.Die();
     }
 }

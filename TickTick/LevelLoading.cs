@@ -123,10 +123,11 @@ partial class Level : GameObjectList
             LoadFlameEnemy(x, y, symbol);
         else if (symbol == 's')
             LoadSpeedPowerUp(x, y);
-        else if (symbol == 'a')
-            LoadAssaultRifleCollectible(x, y);
-        else if (symbol == 'b')
+        else if (symbol == 'a' || symbol == 'b' || symbol == 'm' || symbol == 'p' || symbol == 'P')
+            LoadGunCollectible(x, y, symbol);
+        else if (symbol == 'M')
             LoadAmmoCollectible(x, y);
+
     }
 
     Tile CharToStaticTile(char symbol)
@@ -188,11 +189,38 @@ partial class Level : GameObjectList
         // add it to the game world
         AddChild(s);
     }
-    void LoadAssaultRifleCollectible(int x, int y)
+    void LoadGunCollectible(int x, int y, char symbol)
     {
         // create the GunCollectible object;  place it around the center of the tile
         Vector2 pos = GetCellPosition(x, y) + new Vector2(TileWidth / 2, TileHeight / 3);
-        GunCollectible s = new GunCollectible(this, pos, "Sprites/LevelObjects/Player/Guns/AssaultRifle", typeof(AssaultRifle));
+        Type type;
+        string spriteName;
+        switch(symbol)
+        {
+            case 'a':
+                type = typeof(AssaultRifle);
+                spriteName = "Sprites/LevelObjects/Player/Guns/AssaultRifle";
+                break;
+            case 'b':
+                type = typeof(BurstRifle);
+                spriteName = "Sprites/LevelObjects/Player/Guns/BurstRifle";
+                break;
+            case 'm':
+                type = typeof(MachinePistol);
+                spriteName = "Sprites/LevelObjects/Player/Guns/MachinePistol";
+                break;
+            case 'p':
+                type = typeof(Pistol);
+                spriteName = "Sprites/LevelObjects/Player/Guns/Pistol";
+                break;
+            case 'P':
+                type = typeof(PortalGun);
+                spriteName = "Sprites/LevelObjects/Player/Guns/PortalGun";
+                break;
+            default:
+                throw new Exception("Invalid char used with symbol parameter of LoadGunCollectible");
+        }
+        GunCollectible s = new GunCollectible(this, pos, spriteName, type);
         // add it to the game world
         AddChild(s);
     }

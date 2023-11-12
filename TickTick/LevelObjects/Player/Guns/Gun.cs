@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Mime;
 using Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -164,7 +163,7 @@ abstract class Gun : SpriteGameObject
         bulletsLeft = magazineSize;
     }
 
-    public void Reload()
+    public virtual void Reload()
     {
         bulletsLeft = magazineSize;
         TickTick.AssetManager.PlaySoundEffect(reloadSoundEffectName);
@@ -198,10 +197,27 @@ abstract class Gun : SpriteGameObject
             SetOriginLeft();        
         }
     }
+    bool BarrelHasTileCollision(InputHelper inputHelper)
+    {
+        Vector2 barrelDirection = inputHelper.MousePositionCameraView - (GlobalPosition + new Vector2(0, barrelOffset.Y));
+        barrelDirection.Normalize();
+        for (int i = 0; i < 5; i++)
+        {
+            Point tile = level.GetTileCoordinates(GlobalPosition + new Vector2(0, barrelOffset.Y) + barrelDirection * Width / (i + 1));
+            Tile.Type tileType = level.GetTileType(tile.X, tile.Y);
+
+            // ignore empty tiles
+            if (tileType == Tile.Type.Empty)
+                continue;
+
+            return true;
+        }
+        return false;
+    }
 
     protected void Shoot(InputHelper inputHelper)
     {
-        if (reloading)
+        if (reloading || BarrelHasTileCollision(inputHelper))
             return;
 
         if (bulletsLeft > 0)
@@ -220,7 +236,8 @@ abstract class Gun : SpriteGameObject
             //apply recoil
             localPosition -= projectileDirection * recoilForce;
         }
-        else if(!fullAuto || inputHelper.MouseLeftButtonPressed())
+        //check for pressed to make sure only one magazine empty click is made(not multiple for burst or multiple when holding button with a full auto weapon)
+        else if(inputHelper.MouseLeftButtonPressed())
         {
             TickTick.AssetManager.PlaySoundEffect(magazineEmptySoundEffectName);
         }
@@ -232,8 +249,11 @@ abstract class Gun : SpriteGameObject
         {
             case ProjectileType.bullet:
                 return new Bullet(startPosition, level);
+            case ProjectileType.portal:
+
+                return new PortalProjectile(startPosition, level, this as PortalGun);
             default:
-                return null;
+                throw new Exception("ProjectileType '" + projectileType + "' is not yet implemented");
         }
     }
 

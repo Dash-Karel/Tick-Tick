@@ -44,5 +44,6 @@ internal abstract class PowerUp : Collectible
             RemovePowerUp();
 
         isApllied = false;
+        timer = 0;
     }
 }

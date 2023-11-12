@@ -33,6 +33,9 @@
 #begin Levels/level11.txt
 /copy:Levels/level11.txt
 
+#begin Levels/level12.txt
+/copy:Levels/level12.txt
+
 #begin Sounds/snd_assault_rifle.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -104,6 +107,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/snd_player_jump.wav
+
+#begin Sounds/snd_portal_gun.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/snd_portal_gun.wav
 
 #begin Sounds/snd_reload.mp3
 /importer:Mp3Importer
@@ -327,6 +336,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/LevelObjects/Player/Guns/MachinePistol.png
 
+#begin Sprites/LevelObjects/Player/Guns/Pistol.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/Player/Guns/Pistol.png
+
+#begin Sprites/LevelObjects/Player/Guns/PortalGun.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/Player/Guns/PortalGun.png
+
 #begin Sprites/LevelObjects/Player/spr_celebrate@14.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -398,6 +431,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/LevelObjects/Player/spr_run@13.png
+
+#begin Sprites/LevelObjects/portal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/LevelObjects/portal.png
 
 #begin Sprites/LevelObjects/PowerUps/speedUp.png
 /importer:TextureImporter

@@ -31,17 +31,19 @@ abstract internal class Enemy : AnimatedGameObject
         base.Update(gameTime);
 
         //Check for collisions with bullets
-        foreach(Projectile projectile in level.Player.Gun.ActiveProjectiles)
+        if (level.Player.Gun != null)
         {
-            if(HasPixelPreciseCollision(projectile.BoundingBox))
+            foreach (Projectile projectile in level.Player.Gun.ActiveProjectiles)
             {
-                Die();
-                projectile.CollideWithEnemy();
+                if (HasPixelPreciseCollision(projectile.BoundingBox))
+                {
+                    projectile.CollideWithEnemy(this);
+                }
             }
         }
     }
 
-    void Die()
+    public void Die()
     {
         IsAlive = false;
         TickTick.AssetManager.PlaySoundEffect("Sounds/snd_enemy_death");

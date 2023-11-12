@@ -57,12 +57,12 @@ class Rocket : Enemy
             if (level.Player.LocalPosition.Y < LocalPosition.Y)
             {
                 // moves the player with the rocket
-                level.Player.MoveWithObject(velocity, LocalPosition.Y - Height/4);
+                level.Player.MoveWithObject(velocity.X, LocalPosition.Y - Height/4);
             }
             else
-            {// if the rocket touches the player, the player dies
+            {
+                // if the rocket touches the player, the player dies
                 level.Player.Die();
-
             }
             
         }

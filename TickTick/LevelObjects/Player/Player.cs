@@ -14,7 +14,7 @@ class Player : AnimatedGameObject
     
     const float iceFriction = 1; // Friction factor that determines how slippery the ice is; closer to 0 means more slippery.
     const float normalFriction = 20; // Friction factor that determines how slippery a normal surface is.
-    const float airFriction = 5; // Friction factor that determines how much (horizontal) air resistance there is.
+    const float airFriction = 2; // Friction factor that determines how much (horizontal) air resistance there is.
 
     bool facingLeft; // Whether or not the character is currently looking to the left.
 
@@ -23,7 +23,7 @@ class Player : AnimatedGameObject
     float desiredHorizontalSpeed; // The horizontal speed at which the character would like to move.
     
     bool isOnMovingObject;
-    Vector2 objectVelocity;
+    float objectHorizontalVelocity;
     
     Level level;
     Vector2 startPosition;
@@ -171,6 +171,9 @@ class Player : AnimatedGameObject
 
         Vector2 previousPosition = localPosition;
 
+        if (isOnMovingObject)
+            desiredHorizontalSpeed += objectHorizontalVelocity;
+
         if (CanCollideWithObjects)
             ApplyFriction(gameTime);
         else
@@ -181,8 +184,6 @@ class Player : AnimatedGameObject
                 ApplyGravity(gameTime);
 
         base.Update(gameTime);
-        if (isOnMovingObject)
-            LocalPosition += objectVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (isGrounded &&!IsRising) 
             velocity.Y = 0;
         if (IsFalling)
@@ -324,7 +325,8 @@ class Player : AnimatedGameObject
 
     public void Die()
     {
-        Gun.Visible = false;
+        if(Gun != null)
+            Gun.Visible = false;
 
         IsAlive = false;
         PlayAnimation("die");
@@ -352,6 +354,9 @@ class Player : AnimatedGameObject
     /// </summary>
     public void Celebrate()
     {
+        if(Gun != null)
+            Gun.Visible = false;
+
         isCelebrating = true;
         PlayAnimation("celebrate");
         SetOriginToBottomCenter();
@@ -364,10 +369,11 @@ class Player : AnimatedGameObject
     /// </summary>
     /// <param name="velocity"></param>velocity of the object.
     /// <param name="gameTime"></param>
-    public void MoveWithObject(Vector2 velocity, float yPosition)
+    public void MoveWithObject(float horizontalVelocity, float yPosition)
     {
-        objectVelocity = velocity;
-        LocalPosition = new Vector2(LocalPosition.X, yPosition);
+        objectHorizontalVelocity = horizontalVelocity;
+        if(!IsRising)
+            LocalPosition = new Vector2(LocalPosition.X, yPosition);
         isOnMovingObject = true;
         
     }
